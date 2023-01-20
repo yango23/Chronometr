@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Chronometr</string>
+    <string name="startText">Start</string>
+    <string name="stopText">Stop</string>
+    <string name="reloadText">Reload</string>
+</resources>
