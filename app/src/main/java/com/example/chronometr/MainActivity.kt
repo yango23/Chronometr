@@ -2,15 +2,13 @@ package com.example.chronometr
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.os.SystemClock
-import android.widget.Button
 import android.widget.Chronometer
-import java.time.temporal.ChronoField
+import com.example.chronometr.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var chronotimer: Chronometer
+    lateinit var binding: ActivityMainBinding
+//    lateinit var chronotimer: Chronometer
     var running: Boolean = false
     var offset: Long = 0
 
@@ -20,39 +18,42 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        chronotimer = findViewById(R.id.starttimer)
+//        chronotimer = findViewById(R.id.chronometer)
 
         if (savedInstanceState != null) {
             offset = savedInstanceState.getLong(OFFSET_KEY)
             running = savedInstanceState.getBoolean(RUNNING_KEY)
             if (running) {
-                chronotimer.base = savedInstanceState.getLong(BASE_KEY)
-                chronotimer.start()
+                binding.chronometer.base = savedInstanceState.getLong(BASE_KEY)
+                binding.chronometer.start()
             } else setBaseTime()
         }
 
-        val startButton = findViewById<Button>(R.id.start_button)
-        startButton.setOnClickListener {
+//        val startButton = findViewById<Button>(R.id.start_button)
+        binding.startButton.setOnClickListener {
             if(!running) {
                 setBaseTime()
-                chronotimer.start()
+                binding.chronometer.start()
                 running = true
             }
         }
 
-        val stopButton = findViewById<Button>(R.id.stop_button)
-        stopButton.setOnClickListener {
+//        val stopButton = findViewById<Button>(R.id.stop_button)
+        binding.stopButton.setOnClickListener {
             if (running) {
                 saveOffset()
-                chronotimer.stop()
+                binding.chronometer.stop()
                 running = false
             }
         }
 
-        val restartButton = findViewById<Button>(R.id.restart_button)
-        restartButton.setOnClickListener {
+//        val restartButton = findViewById<Button>(R.id.restart_button)
+        binding.restartButton.setOnClickListener {
             offset = 0
             setBaseTime()
         }
@@ -61,15 +62,15 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         savedInstanceState.putLong(OFFSET_KEY, offset)
         savedInstanceState.putBoolean(RUNNING_KEY, running)
-        savedInstanceState.putLong(BASE_KEY, chronotimer.base)
+        savedInstanceState.putLong(BASE_KEY, binding.chronometer.base)
         super.onSaveInstanceState(savedInstanceState)
     }
 
     private fun saveOffset() {
-        offset = SystemClock.elapsedRealtime() - chronotimer.base
+        offset = SystemClock.elapsedRealtime() - binding.chronometer.base
     }
 
     private fun setBaseTime() {
-        chronotimer.base = SystemClock.elapsedRealtime() - offset
+        binding.chronometer.base = SystemClock.elapsedRealtime() - offset
     }
 }
